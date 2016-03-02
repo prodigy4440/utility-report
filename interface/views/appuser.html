@@ -1,0 +1,197 @@
+<!-- BEGIN PAGE BREADCRUMB -->
+<ul class="page-breadcrumb breadcrumb">
+    <li>
+        <a href="#">Home</a>
+        <i class="fa fa-circle"></i>
+    </li>
+    <li class="active">Application Users</li>
+</ul>
+<!-- END PAGE BREADCRUMB -->
+<!-- BEGIN MAIN CONTENT -->
+<div ng-controller="GeneralPageController">
+    <!--  <div class="note note-info">
+          <h3>Meet Metronic AngularJS Version!
+              <span class="close" data-close="note"></span>
+          </h3>
+          <p> AngularJS version of Metronic gives an extremely fast browsing experience to users. It uses lazy loading of dependency resources(modules, controllers, templates, jquery plugins, javascripts and even css files) on demand. UI-Router is used for
+              flexible routing with nested views. UI Bootstrap enables using all Bootstrap framework components with pure AngularJS directives. </p>
+          <span class="label label-danger">NOTE:</span> All Metronic features from the HTML version(pages, layout options, components, plugins, etc) are fully compatible in the AngularJS version.</span>
+          </p>
+      </div>-->
+    <!-- BEGIN DASHBOARD STATS -->
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BEGIN EXAMPLE TABLE PORTLET-->
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption font-dark">
+                        <i class="icon-settings font-dark"></i>
+                        <span class="caption-subject bold uppercase"> Application Users</span>
+                    </div>
+
+                </div>
+                <div class="portlet-body">
+                    <div class="table-toolbar">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="btn-group">
+                                    <button id="sample_editable_1_new" class="btn sbold green" data-target="#stack1"
+                                            data-toggle="modal"> Add New
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="btn-group pull-right">
+                                    <button class="btn green  btn-outline dropdown-toggle" data-toggle="dropdown">Tools
+                                        <i class="fa fa-angle-down"></i>
+                                    </button>
+                                    <ul class="dropdown-menu pull-right">
+                                        <li>
+                                            <a href="javascript:;">
+                                                <i class="fa fa-print"></i> Print </a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:;">
+                                                <i class="fa fa-file-pdf-o"></i> Save as PDF </a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:;">
+                                                <i class="fa fa-file-excel-o"></i> Export to Excel </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table table-striped table-bordered table-hover table-checkable order-column"
+                           id="sample_1">
+                        <thead>
+                        <tr>
+                            <th>
+                                <input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes"/></th>
+                            <th> Username</th>
+                            <th> Email</th>
+                            <th> Phone Number</th>
+                            <th> Role</th>
+                            <th> Manage</th>
+                            <th> Status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="odd gradeX" ng-repeat="user in users">
+                            <td>
+                                <input type="checkbox" class="checkboxes" value="1"/></td>
+                            <td> {{user.userName}}</td>
+                            <td>
+                                <a href="mailto:shuxer@gmail.com"> {{user.email}} </a>
+                            </td>
+                            <td>{{user.phoneNumber}} </td>
+                            <td> {{user.userType}}</td>
+                            <td class="center"><button class="btn small red">Suspend</button></td>
+                            <td>
+                                <span class="label label-sm label-success"> Active </span>
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- END EXAMPLE TABLE PORTLET-->
+        </div>
+    </div>
+
+
+    <div class="row">
+
+        <div class="portlet-body">
+
+
+            <!-- Add new user form modal -->
+            <div id="stack1" class="modal fade" tabindex="-1" data-focus-on="input:first">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">Add New User</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+
+                        <div class="col-md-12">
+                            <div class="input-group">
+                                                        <span class="input-group-addon">
+                                                            <i class="fa fa-envelope"></i>
+                                                        </span>
+                                <input type="email" class="form-control" placeholder="Email Address"></div>
+                        </div>
+
+                        <div class="form-group">
+
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                                     <span class="input-group-addon">
+                                                            <i class="fa fa-user"></i>
+                                                        </span>
+                                    <input type="password" class="form-control" placeholder="Password">
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                                     <span class="input-group-addon">
+                                                            <i class="fa fa-key"></i>
+                                                        </span>
+                                    <input type="password" class="form-control" placeholder=" Confirm Password">
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <input class="form-control" type="password1" data-tabindex="4" placeholder="FirstName"
+                                   style="width:50%; margin-top:10px; ">
+
+                            <input class="form-control" type="password2" data-tabindex="5" placeholder="LastName"
+                                   style="width:50%;margin-top:10px; ">
+
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-outline dark">Close</button>
+                        <button type="button" class="btn green">Add User</button>
+                    </div>
+                </div>
+
+
+                <!-- ajax -->
+                <div id="ajax-modal" class="modal fade" tabindex="-1"></div>
+                <!-- static -->
+
+
+            </div>
+            <!-- full width -->
+
+            <!-- long modals -->
+
+        </div>
+    </div>
+    <!-- END DASHBOARD STATS -->
+
+
+</div>
+<!-- END MAIN CONTENT -->
+<!-- BEGIN MAIN JS & CSS -->
+<script>
+//    Dashboard.init();
+
+</script>
+
+<!-- BEGIN MAIN JS & CSS -->
