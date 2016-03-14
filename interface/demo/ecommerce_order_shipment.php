@@ -29,7 +29,7 @@
       'Test Customer',
       '12/09/2013',
       rand(3,10),
-      '<a href="javascript:;" class="btn btn-xs default btn-editable"><i class="fa fa-print"></i> Print</a>',
+      '<a href="javascript:;" class="btn btn-sm default btn-editable"><i class="fa fa-print"></i> Print</a>',
     );
   }
 

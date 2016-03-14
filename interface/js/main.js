@@ -71,9 +71,9 @@ MetronicApp.factory('settings', ['$rootScope', function($rootScope) {
             pageBodySolid: false, // solid body color state
             pageAutoScrollOnLoad: 1000 // auto scroll to top on page load
         },
-        assetsPath: '../assets',
-        globalPath: '../assets/global',
-        layoutPath: '../assets/layouts/layout4',
+        assetsPath: 'assets',
+        globalPath: 'assets/global',
+        layoutPath: 'assets/layouts/layout4',
     };
 
     $rootScope.settings = settings;
@@ -82,11 +82,12 @@ MetronicApp.factory('settings', ['$rootScope', function($rootScope) {
 }]);
 
 /* Setup App Main Controller */
-MetronicApp.controller('AppController', ['$scope', '$rootScope', function($scope, $rootScope) {
+MetronicApp.controller('AppController', ['$scope', '$rootScope', 'Loader', function($scope, $rootScope, Loader) {
     $scope.$on('$viewContentLoaded', function() {
         App.initComponents(); // init core components
         //Layout.init(); //  Init entire layout(header, footer, sidebar, etc) on page load if the partials included in server side instead of loading with ng-include directive 
     });
+    $rootScope.$loader = Loader;
 }]);
 
 /***
@@ -178,9 +179,58 @@ MetronicApp.controller('FooterController', ['$scope', function($scope) {
 }]);
 
 /* Setup Rounting For All Pages */
-MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+MetronicApp.config(['$stateProvider', '$urlRouterProvider', '$httpProvider',
+    function($stateProvider, $urlRouterProvider, $httpProvider) {
     // Redirect any unmatched url
-    $urlRouterProvider.otherwise("/dashboard");  
+    $urlRouterProvider.otherwise("/dashboard");
+
+    $httpProvider.interceptors.push(function ($rootScope, Loader, LocalStorage, Toast) {
+        var isRestContext = function (url) {
+            return url.indexOf("/api/v1.0") > 0;
+        };
+
+        return {
+            request: function (config) {
+                if (isRestContext(config.url)) {
+                    Loader.start();
+
+                    var entity = LocalStorage.get(Constants.KEY_USER_INFO);
+                    config.headers.sessionId = entity.token;
+                }
+                return config;
+            },
+            response: function (response) {
+                if (isRestContext(response.config.url)) {
+                    Loader.stop();
+
+                    if (!response.data.status) {
+                        if (!(response.headers('Content-Type') == "application/octet-stream")) {
+                            Toast.error("An error occurred", "We were unable to open discussions with "
+                                + "our servers. Please try again");
+                        }
+                    } else if (response.data.status.code > 0) {
+                        // Not success, apparently. Toast the message
+                        Toast.info("Something happened", response.data.status.description);
+                    }
+
+                    if (response.data.status && response.data.status.code === 212) {
+                        // Unauthenticated!!!
+                        LocalStorage.resetImmediate();
+                        location.href = "login.html";
+                    }
+                }
+                return response;
+            },
+            responseError: function (response) {
+                if (isRestContext(response.config.url)) {
+                    Loader.stop();
+                    Toast.error("An error occurred", "We were unable to open discussions"
+                        + " with our servers.  Your internet connection might be down");
+                }
+                return response;
+            }
+        };
+    });
     
     $stateProvider
 
@@ -196,12 +246,12 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                         name: 'MetronicApp',
                         insertBefore: '#ng_load_plugins_before', // load the above css files before a LINK element with this ID. Dynamic CSS files must be loaded between core and theme css files
                         files: [
-                            '../assets/global/plugins/morris/morris.css',                            
-                            '../assets/global/plugins/morris/morris.min.js',
-                            '../assets/global/plugins/morris/raphael-min.js',                            
-                            '../assets/global/plugins/jquery.sparkline.min.js',
+                            'assets/global/plugins/morris/morris.css',                            
+                            'assets/global/plugins/morris/morris.min.js',
+                            'assets/global/plugins/morris/raphael-min.js',                            
+                            'assets/global/plugins/jquery.sparkline.min.js',
 
-                            '../assets/pages/scripts/dashboard.min.js',
+                            'assets/pages/scripts/dashboard.min.js',
                             'js/controllers/DashboardController.js',
                         ] 
                     });
@@ -239,7 +289,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                     return $ocLazyLoad.load([{
                         name: 'angularFileUpload',
                         files: [
-                            '../assets/global/plugins/angularjs/plugins/angular-file-upload/angular-file-upload.min.js',
+                            'assets/global/plugins/angularjs/plugins/angular-file-upload/angular-file-upload.min.js',
                         ] 
                     }, {
                         name: 'MetronicApp',
@@ -263,8 +313,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                         name: 'ui.select',
                         insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
                         files: [
-                            '../assets/global/plugins/angularjs/plugins/ui-select/select.min.css',
-                            '../assets/global/plugins/angularjs/plugins/ui-select/select.min.js'
+                            'assets/global/plugins/angularjs/plugins/ui-select/select.min.css',
+                            'assets/global/plugins/angularjs/plugins/ui-select/select.min.js'
                         ] 
                     }, {
                         name: 'MetronicApp',
@@ -294,34 +344,251 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
             }
         })
 
+        // Selfcare
+        .state('selfcare', {
+            url: "/self_care",
+            templateUrl: "views/self_care.html",
+            data: {pageTitle: 'SelfCare'},
+            controller: "SelfcareController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load([{
+                        name: 'MetronicApp',
+                        files: [
+                            'js/controllers/SelfcareController.js'
+                        ]
+                    }]);
+                }]
+            }
+        })
+
+        // Terminal User
+        .state('terminaluser', {
+            url: "/terminal_users",
+            templateUrl: "views/terminal_users.html",
+            data: {pageTitle: 'Cashiers'},
+            controller: "TerminalController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load([{
+                        name: 'MetronicApp',
+                        files: [
+                            'js/controllers/TerminalController.js'
+                        ]
+                    }]);
+                }]
+            }
+        })
+
+        // CRM
+        .state('crm', {
+            url: "/crm",
+            templateUrl: "views/crm.html",
+            data: {pageTitle: 'CRM'},
+            controller: "CrmController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load([{
+                        name: 'MetronicApp',
+                        files: [
+                            'js/controllers/CrmController.js'
+                        ]
+                    }]);
+                }]
+            }
+        })
+
+        // Provider
+        .state('provider', {
+            url: "/provider",
+            templateUrl: "views/provider.html",
+            data: {pageTitle: 'Transaction Provider'},
+            controller: "ProviderController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load([{
+                        name: 'MetronicApp',
+                        files: [
+                            'js/controllers/ProviderController.js'
+                        ]
+                    }]);
+                }]
+            }
+        })
+
+        // DISTRICT CASHIN
+        .state('districtcashin', {
+            url: "/districtcashin",
+            templateUrl: "views/cashin_district.html",
+            data: {pageTitle: 'DISTRICT CASHIN'},
+            controller: "DistrictCashinController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load([{
+                        name: 'MetronicApp',
+                        files: [
+                            'js/controllers/DistrictCashinController.js'
+                        ]
+                    }]);
+                }]
+            }
+        })
+
+        // BANK
+        .state('bank', {
+            url: "/bank",
+            templateUrl: "views/bank.html",
+            data: {pageTitle: 'Bank Details'},
+            controller: "BankController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load([{
+                        name: 'MetronicApp',
+                        files: [
+                            'js/controllers/BankController.js'
+                        ]
+                    }]);
+                }]
+            }
+        })
+
+        // Cashin All
+        .state('cashins', {
+            url: "/cashins",
+            templateUrl: "views/cashin_all.html",
+            data: {pageTitle: 'Cashin All'},
+            controller: "CashinAllController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load([{
+                        name: 'MetronicApp',
+                        files: [
+                            'js/controllers/CashinAllController.js'
+                        ]
+                    }]);
+                }]
+            }
+        })
+
+        // Cashin Month
+        .state('mcashin', {
+            url: "/cashin/month",
+            templateUrl: "views/cashin_month.html",
+            data: {pageTitle: "This Month's Cashin "},
+            controller: "CashinMonthController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load([{
+                        name: 'MetronicApp',
+                        files: [
+                            'js/controllers/CashinMonthController.js'
+                        ]
+                    }]);
+                }]
+            }
+        })
+
+
         // Tree View
         .state('tree', {
             url: "/tree",
             templateUrl: "views/tree.html",
-            data: {pageTitle: 'jQuery Tree View'},
-            controller: "GeneralPageController",
+            data: {pageTitle: 'Transactions'},
+            controller: "TransactionController",
             resolve: {
                 deps: ['$ocLazyLoad', function($ocLazyLoad) {
                     return $ocLazyLoad.load([{
                         name: 'MetronicApp',
                         insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
                         files: [
-                            '../assets/global/plugins/jstree/dist/themes/default/style.min.css',
+                            'assets/global/plugins/jstree/dist/themes/default/style.min.css',
 
-                            '../assets/global/plugins/jstree/dist/jstree.min.js',
-                            '../assets/pages/scripts/ui-tree.min.js',
-                            'js/controllers/GeneralPageController.js'
+                            'assets/global/plugins/jstree/dist/jstree.min.js',
+                            'assets/pages/scripts/ui-tree.min.js',
+                            'js/controllers/TransactionController.js'
                         ] 
                     }]);
                 }] 
             }
-        })     
+        })
+
+        // Create New Cash Office
+        .state('newcashoffice', {
+            url: "/newcashoffice",
+            templateUrl: "views/create_cashoffice.html",
+            data: {pageTitle: 'New Cash Office'},
+            controller: "CreateCashOfficeController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load([{
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+                            'assets/global/plugins/jstree/dist/themes/default/style.min.css',
+
+                            'assets/global/plugins/jstree/dist/jstree.min.js',
+                            'assets/pages/scripts/ui-tree.min.js',
+                            'js/controllers/CreateCashOfficeController.js'
+                        ]
+                    }]);
+                }]
+            }
+        })
+
+
+        // Cash Offices
+        .state('cashofficecashin', {
+            url: "/cashofficecashin",
+            templateUrl: "views/cashin_cashoffices.html",
+            data: {pageTitle: 'Cash Office Collections'},
+            controller: "CashOfficeCashinController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load([{
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+                            'assets/global/plugins/jstree/dist/themes/default/style.min.css',
+
+                            'assets/global/plugins/jstree/dist/jstree.min.js',
+                            'assets/pages/scripts/ui-tree.min.js',
+                            'js/controllers/CashOfficeCashinController.js'
+                        ]
+                    }]);
+                }]
+            }
+        })
+
+
+        // Regional Collections
+        .state('cregional', {
+            url: "/cregional",
+            templateUrl: "views/regional_collection.html",
+            data: {pageTitle: 'Regional Collection'},
+            controller: "RegionalCollectionController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load([{
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+                            'assets/global/plugins/jstree/dist/themes/default/style.min.css',
+
+                            'assets/global/plugins/jstree/dist/jstree.min.js',
+                            'assets/pages/scripts/ui-tree.min.js',
+                            'js/controllers/RegionalCollectionController.js'
+                        ]
+                    }]);
+                }]
+            }
+        })
+
 
         // Form Tools
         .state('formtools', {
             url: "/form-tools",
             templateUrl: "views/form_tools.html",
-            data: {pageTitle: 'Form Tools'},
+            data: {pageTitle: 'Cashiers'},
             controller: "GeneralPageController",
             resolve: {
                 deps: ['$ocLazyLoad', function($ocLazyLoad) {
@@ -329,22 +596,22 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                         name: 'MetronicApp',
                         insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
                         files: [
-                            '../assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css',
-                            '../assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css',
-                            '../assets/global/plugins/bootstrap-markdown/css/bootstrap-markdown.min.css',
-                            '../assets/global/plugins/typeahead/typeahead.css',
+                            'assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css',
+                            'assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css',
+                            'assets/global/plugins/bootstrap-markdown/css/bootstrap-markdown.min.css',
+                            'assets/global/plugins/typeahead/typeahead.css',
 
-                            '../assets/global/plugins/fuelux/js/spinner.min.js',
-                            '../assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js',
-                            '../assets/global/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js',
-                            '../assets/global/plugins/jquery.input-ip-address-control-1.0.min.js',
-                            '../assets/global/plugins/bootstrap-pwstrength/pwstrength-bootstrap.min.js',
-                            '../assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js',
-                            '../assets/global/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js',
-                            '../assets/global/plugins/bootstrap-touchspin/bootstrap.touchspin.js',
-                            '../assets/global/plugins/typeahead/handlebars.min.js',
-                            '../assets/global/plugins/typeahead/typeahead.bundle.min.js',
-                            '../assets/pages/scripts/components-form-tools-2.min.js',
+                            'assets/global/plugins/fuelux/js/spinner.min.js',
+                            'assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js',
+                            'assets/global/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js',
+                            'assets/global/plugins/jquery.input-ip-address-control-1.0.min.js',
+                            'assets/global/plugins/bootstrap-pwstrength/pwstrength-bootstrap.min.js',
+                            'assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js',
+                            'assets/global/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js',
+                            'assets/global/plugins/bootstrap-touchspin/bootstrap.touchspin.js',
+                            'assets/global/plugins/typeahead/handlebars.min.js',
+                            'assets/global/plugins/typeahead/typeahead.bundle.min.js',
+                            'assets/pages/scripts/components-form-tools-2.min.js',
 
                             'js/controllers/GeneralPageController.js'
                         ] 
@@ -365,22 +632,22 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                         name: 'MetronicApp',
                         insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
                         files: [
-                            '../assets/global/plugins/clockface/css/clockface.css',
-                            '../assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css',
-                            '../assets/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css',
-                            '../assets/global/plugins/bootstrap-colorpicker/css/colorpicker.css',
-                            '../assets/global/plugins/bootstrap-daterangepicker/daterangepicker-bs3.css',
-                            '../assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css',
+                            'assets/global/plugins/clockface/css/clockface.css',
+                            'assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css',
+                            'assets/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css',
+                            'assets/global/plugins/bootstrap-colorpicker/css/colorpicker.css',
+                            'assets/global/plugins/bootstrap-daterangepicker/daterangepicker-bs3.css',
+                            'assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css',
 
-                            '../assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
-                            '../assets/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js',
-                            '../assets/global/plugins/clockface/js/clockface.js',
-                            '../assets/global/plugins/moment.min.js',
-                            '../assets/global/plugins/bootstrap-daterangepicker/daterangepicker.js',
-                            '../assets/global/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js',
-                            '../assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js',
+                            'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
+                            'assets/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js',
+                            'assets/global/plugins/clockface/js/clockface.js',
+                            'assets/global/plugins/moment.min.js',
+                            'assets/global/plugins/bootstrap-daterangepicker/daterangepicker.js',
+                            'assets/global/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js',
+                            'assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js',
 
-                            '../assets/pages/scripts/components-date-time-pickers.min.js',
+                            'assets/pages/scripts/components-date-time-pickers.min.js',
 
                             'js/controllers/GeneralPageController.js'
                         ] 
@@ -401,15 +668,15 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                         name: 'MetronicApp',
                         insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
                         files: [
-                            '../assets/global/plugins/bootstrap-select/css/bootstrap-select.min.css',
-                            '../assets/global/plugins/select2/css/select2.min.css',
-                            '../assets/global/plugins/select2/css/select2-bootstrap.min.css',
+                            'assets/global/plugins/bootstrap-select/css/bootstrap-select.min.css',
+                            'assets/global/plugins/select2/css/select2.min.css',
+                            'assets/global/plugins/select2/css/select2-bootstrap.min.css',
 
-                            '../assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js',
-                            '../assets/global/plugins/select2/js/select2.full.min.js',
+                            'assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js',
+                            'assets/global/plugins/select2/js/select2.full.min.js',
 
-                            '../assets/pages/scripts/components-bootstrap-select.min.js',
-                            '../assets/pages/scripts/components-select2.min.js',
+                            'assets/pages/scripts/components-bootstrap-select.min.js',
+                            'assets/pages/scripts/components-select2.min.js',
 
                             'js/controllers/GeneralPageController.js'
                         ] 
@@ -430,12 +697,12 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                         name: 'MetronicApp',
                         insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
                         files: [                             
-                            '../assets/global/plugins/datatables/datatables.min.css', 
-                            '../assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+                            'assets/global/plugins/datatables/datatables.min.css', 
+                            'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
 
-                            '../assets/global/plugins/datatables/datatables.all.min.js',
+                            'assets/global/plugins/datatables/datatables.all.min.js',
 
-                            '../assets/pages/scripts/table-datatables-managed.min.js',
+                            'assets/pages/scripts/table-datatables-managed.min.js',
 
                             'js/controllers/GeneralPageController.js'
                         ]
@@ -456,13 +723,13 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                         name: 'MetronicApp',
                         insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
                         files: [
-                            '../assets/global/plugins/datatables/datatables.min.css', 
-                            '../assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
-                            '../assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css',
+                            'assets/global/plugins/datatables/datatables.min.css', 
+                            'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+                            'assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css',
 
-                            '../assets/global/plugins/datatables/datatables.all.min.js',
-                            '../assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
-                            '../assets/global/scripts/datatable.min.js',
+                            'assets/global/plugins/datatables/datatables.all.min.js',
+                            'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
+                            'assets/global/scripts/datatable.min.js',
 
                             'js/scripts/table-ajax.js',
                             'js/controllers/GeneralPageController.js'
@@ -484,13 +751,13 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                         name: 'MetronicApp',  
                         insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
                         files: [
-                            '../assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css',
-                            '../assets/pages/css/profile.css',
+                            'assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css',
+                            'assets/pages/css/profile.css',
                             
-                            '../assets/global/plugins/jquery.sparkline.min.js',
-                            '../assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js',
+                            'assets/global/plugins/jquery.sparkline.min.js',
+                            'assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js',
 
-                            '../assets/pages/scripts/profile.min.js',
+                            'assets/pages/scripts/profile.min.js',
 
                             'js/controllers/UserProfileController.js'
                         ]                    
@@ -532,16 +799,16 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                         name: 'MetronicApp',  
                         insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
                         files: [
-                            '../assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css',
-                            '../assets/apps/css/todo-2.css',
-                            '../assets/global/plugins/select2/css/select2.min.css',
-                            '../assets/global/plugins/select2/css/select2-bootstrap.min.css',
+                            'assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css',
+                            'assets/apps/css/todo-2.css',
+                            'assets/global/plugins/select2/css/select2.min.css',
+                            'assets/global/plugins/select2/css/select2-bootstrap.min.css',
 
-                            '../assets/global/plugins/select2/js/select2.full.min.js',
+                            'assets/global/plugins/select2/js/select2.full.min.js',
                             
-                            '../assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
+                            'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
 
-                            '../assets/apps/scripts/todo-2.min.js',
+                            'assets/apps/scripts/todo-2.min.js',
 
                             'js/controllers/TodoController.js'  
                         ]                    

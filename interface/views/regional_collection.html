@@ -1,0 +1,74 @@
+<!-- BEGIN PAGE BREADCRUMB -->
+<ul class="page-breadcrumb breadcrumb">
+    <li>
+        <a href="#">Home</a>
+        <i class="fa fa-circle"></i>
+    </li>
+    <li class="active" data-ng-bind="$state.current.data.pageTitle"></li>
+</ul>
+<!-- END PAGE BREADCRUMB -->
+<!-- BEGIN MAIN CONTENT -->
+<!--<div class="note note-success note-bordered">-->
+<!--<h3>CRM</h3>-->
+<!--</div>-->
+<div class="row">
+    <div class="col-md-12">
+        <!-- BEGIN Portlet PORTLET-->
+        <div class="portlet light">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="icon-paper-plane font-yellow-casablanca"></i>
+                    <span class="caption-subject bold font-yellow-casablanca uppercase"> Regional Analysis</span>
+                    <!--<span class="caption-helper">more samples...</span>-->
+                </div>
+                <div class="inputs">
+                    <div class="portlet-input input-inline input-medium">
+                        <div class="form-group">
+                            <label class="control-label col-md-3">Date Range</label>
+                            <div class="col-md-4">
+                                <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
+                                    <input type="text" class="form-control" name="from">
+                                    <span class="input-group-addon"> to </span>
+                                    <input type="text" class="form-control" name="to"> </div>
+                                <!-- /input-group -->
+                                <span class="help-block"> Select date range </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="portlet-body">
+
+                <div class="row">
+
+                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" ng-repeat="s in summary">
+                        <div class="dashboard-stat2 bordered">
+                            <div class="display">
+                                <div class="number">
+                                    <h3 class="font-green-sharp">
+                                        <span data-counter="counterup" data-value="7800">District: {{s.district}}</span>
+                                    </h3>
+
+                                    <h5 class="font-green-sharp">
+                                        <span data-counter="counterup" data-value="7800">Total Cash: </span>
+                                        <small class="font-green-sharp">{{s.total}}</small>
+                                    </h5>
+
+                                    <h6 class="font-green-sharp">
+                                        <span data-counter="counterup" data-value="7800">No. Transaction: </span>
+                                        <small class="font-green-sharp">{{s.count}}</small>
+                                    </h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+        <!-- END Portlet PORTLET-->
+    </div>
+</div>

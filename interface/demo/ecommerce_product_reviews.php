@@ -33,7 +33,7 @@
       'Test Customer',
       'Very nice and useful product. I recommend to this everyone.',
       '<span class="label label-sm label-'.(key($status)).'">'.(current($status)).'</span>',
-      '<a href="javascript:;" class="btn btn-xs default btn-editable"><i class="fa fa-share"></i> View</a>',
+      '<a href="javascript:;" class="btn btn-sm btn-default btn-editable"><i class="fa fa-share"></i> View</a>',
     );
   }
 

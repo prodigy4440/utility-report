@@ -1,0 +1,264 @@
+<!-- BEGIN PAGE BREADCRUMB -->
+<ul class="page-breadcrumb breadcrumb">
+    <li>
+        <a href="#">Home</a>
+        <i class="fa fa-circle"></i>
+    </li>
+    <li class="active" data-ng-bind="$state.current.data.pageTitle"></li>
+</ul>
+<!-- END PAGE BREADCRUMB -->
+<!-- BEGIN MAIN CONTENT -->
+<!--<div class="note note-success note-bordered">-->
+<!--<h3>CRM</h3>-->
+<!--</div>-->
+<div class="row">
+    <div class="col-md-12">
+        <!-- BEGIN Portlet PORTLET-->
+        <div class="portlet light">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="icon-paper-plane font-yellow-casablanca"></i>
+                    <span class="caption-subject bold font-yellow-casablanca uppercase"> District Cashin</span>
+                    <!--<span class="caption-helper">more samples...</span>-->
+                </div>
+                <div class="inputs">
+                    <div class="portlet-input input-inline input-medium">
+                        <div class="form-group">
+                            <label class="control-label col-md-3">District</label>
+                            <div class="col-md-6">
+                                <select class="form-control" ng-model="cashin.district" style="width: 150%;" ng-change="loadCashin(); loadCountByStatusPerDistrict()">
+                                    <option ng-repeat="b in businessunits" value="{{b}}">{{b.name}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="portlet-body">
+
+
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                        <div class="dashboard-stat2 bordered">
+                            <div class="display">
+                                <div class="number">
+                                    <!--<h3 class="font-green-sharp">-->
+                                        <!--<span data-counter="counterup" data-value="7800">0</span>-->
+                                        <!--<small class="font-green-sharp">$</small>-->
+                                    <!--</h3>-->
+                                    <small>SUCCESS</small>
+                                </div>
+                                <div class="icon">
+                                    <i class="icon-bar-chart"> {{stat.confirm}} </i>
+                                </div>
+                            </div>
+                            <div class="progress-info">
+                                <div class="progress">
+                                        <span style="width: 100%;" class="progress-bar progress-bar-success green-sharp">
+                                            <span class="sr-only">100% progress</span>
+                                        </span>
+                                </div>
+                                <div class="status">
+                                    <!--<div class="status-title"> progress </div>-->
+                                    <!--<div class="status-number"> 76% </div>-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                        <div class="dashboard-stat2 bordered">
+                            <div class="display">
+                                <div class="number">
+                                    <!--<h3 class="font-red-haze">-->
+                                        <!--<span data-counter="counterup" data-value="1349">0</span>-->
+                                    <!--</h3>-->
+                                    <small>PENDING</small>
+                                </div>
+                                <div class="icon">
+                                    <i class="icon-pie-chart"> {{stat.pending}} </i>
+                                </div>
+                            </div>
+                            <div class="progress-info">
+                                <div class="progress">
+                                        <span style="width: 100%;" class="progress-bar progress-bar-success blue-sharp">
+                                            <!--<span class="sr-only">85% change</span>-->
+                                        </span>
+                                </div>
+                                <div class="status">
+                                    <!--<div class="status-title"> change </div>-->
+                                    <!--<div class="status-number"> 85% </div>-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                        <div class="dashboard-stat2 bordered">
+                            <div class="display">
+                                <div class="number">
+                                    <h3 class="font-blue-sharp">
+                                        <span data-counter="counterup" data-value="567"></span>
+                                    </h3>
+                                    <small>DECLINED</small>
+                                </div>
+                                <div class="icon">
+                                    <i class="icon-rocket"> {{stat.decline}} </i>
+                                </div>
+                            </div>
+                            <div class="progress-info">
+                                <div class="progress">
+                                        <span style="width: 100%;" class="progress-bar progress-bar-success red-haze">
+                                            <span class="sr-only">45% grow</span>
+                                        </span>
+                                </div>
+                                <div class="status">
+                                    <!--<div class="status-title"> grow </div>-->
+                                    <!--<div class="status-number"> 45% </div>-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                        <div class="dashboard-stat2 bordered">
+                            <div class="display">
+                                <div class="number">
+                                    <h3 class="font-purple-soft">
+                                        <span data-counter="counterup" data-value="276"></span>
+                                    </h3>
+                                    <small>EXPIRED</small>
+                                </div>
+                                <div class="icon">
+                                    <i class="icon-magnet"> {{stat.expire}} </i>
+                                </div>
+                            </div>
+                            <div class="progress-info">
+                                <div class="progress">
+                                        <span style="width: 100%;" class="progress-bar progress-bar-success purple-soft">
+                                            <span class="sr-only">56% change</span>
+                                        </span>
+                                </div>
+                                <div class="status">
+                                    <!--<div class="status-title"> change </div>-->
+                                    <!--<div class="status-number"> 57% </div>-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="row widget-row">
+                    <div class="col-md-3">
+                        <!-- BEGIN WIDGET THUMB -->
+                        <div class="widget-thumb widget-bg-color-white text-uppercase margin-bottom-20 bordered">
+                            <h4 class="widget-thumb-heading">Current Balance</h4>
+                            <div class="widget-thumb-wrap">
+                                <i class="widget-thumb-icon bg-green icon-bulb"></i>
+                                <div class="widget-thumb-body">
+                                    <span class="widget-thumb-subtitle">USD</span>
+                                    <span class="widget-thumb-body-stat" data-counter="counterup" data-value="7,644">0</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END WIDGET THUMB -->
+                    </div>
+                    <div class="col-md-3">
+                        <!-- BEGIN WIDGET THUMB -->
+                        <div class="widget-thumb widget-bg-color-white text-uppercase margin-bottom-20 bordered">
+                            <h4 class="widget-thumb-heading">Weekly Sales</h4>
+                            <div class="widget-thumb-wrap">
+                                <i class="widget-thumb-icon bg-red icon-layers"></i>
+                                <div class="widget-thumb-body">
+                                    <span class="widget-thumb-subtitle">USD</span>
+                                    <span class="widget-thumb-body-stat" data-counter="counterup" data-value="1,293">0</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END WIDGET THUMB -->
+                    </div>
+                    <div class="col-md-3">
+                        <!-- BEGIN WIDGET THUMB -->
+                        <div class="widget-thumb widget-bg-color-white text-uppercase margin-bottom-20 bordered">
+                            <h4 class="widget-thumb-heading">Biggest Purchase</h4>
+                            <div class="widget-thumb-wrap">
+                                <i class="widget-thumb-icon bg-purple icon-screen-desktop"></i>
+                                <div class="widget-thumb-body">
+                                    <span class="widget-thumb-subtitle">USD</span>
+                                    <span class="widget-thumb-body-stat" data-counter="counterup" data-value="815">0</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END WIDGET THUMB -->
+                    </div>
+                    <div class="col-md-3">
+                        <!-- BEGIN WIDGET THUMB -->
+                        <div class="widget-thumb widget-bg-color-white text-uppercase margin-bottom-20 bordered">
+                            <h4 class="widget-thumb-heading">Average Monthly</h4>
+                            <div class="widget-thumb-wrap">
+                                <i class="widget-thumb-icon bg-blue icon-bar-chart"></i>
+                                <div class="widget-thumb-body">
+                                    <span class="widget-thumb-subtitle">USD</span>
+                                    <span class="widget-thumb-body-stat" data-counter="counterup" data-value="5,071">0</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END WIDGET THUMB -->
+                    </div>
+                </div>
+
+
+
+                <table class="table table-striped table-bordered table-hover table-checkable order-column"
+                       id="sample_1">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Billing Account Number</th>
+                        <th>Purpose</th>
+                        <th>Amount (&#8358;)</th>
+                        <th colspan="2">Initiation Time</th>
+                        <th>Confirmation Time</th>
+                        <th>Payment Mode</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="odd gradeX" ng-repeat="cashin in monthcashin">
+                        <td>{{monthcashin.indexOf(cashin)+1}}</td>
+                        <td> {{cashin.secondaryUserId}}</td>
+                        <td> {{cashin.purpose}}</td>
+                        <td>{{cashin.amount}}</td>
+                        <td colspan="2">{{cashin.initiationTime | date:'medium'}}</td>
+                        <td> {{cashin.confirmationTime | date:'medium'}}</td>
+                        <td> {{cashin.ucgChannel}}</td>
+                        <td>
+                            <div ng-switch on="cashin.status">
+                                <div ng-switch-when="0">
+                                    <span class="label label-sm label-info"> PENDING </span>
+                                </div>
+                                <div ng-switch-when="1">
+                                    <span class="label label-sm label-success"> SUCCESS </span>
+                                </div>
+                                <div ng-switch-when="2">
+                                    <span class="label label-sm label-warning"> DECLINED </span>
+                                </div>
+                                <div ng-switch-when="3">
+                                    <span class="label label-sm label-danger"> EXPIRED </span>
+                                </div>
+                                <div ng-switch-when="4">
+                                    <span class="label label-sm label-danger"> CORRUPTED </span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+        <!-- END Portlet PORTLET-->
+    </div>
+</div>

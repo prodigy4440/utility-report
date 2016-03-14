@@ -1,11 +1,14 @@
-angular.module('MetronicApp').controller('UserProfileController',
+/**
+ * Created by prodigy4440 on 3/4/16.
+ */
+angular.module('MetronicApp').controller('TransactionController',
     function($rootScope, $scope, $http, $timeout,API, Toast, LocalStorage, $window) {
-    $scope.$on('$viewContentLoaded', function() {   
+    $scope.$on('$viewContentLoaded', function() {
         App.initAjax(); // initialize core components
-        Layout.setSidebarMenuActiveLink('set', $('#sidebar_menu_link_profile')); // set profile link active in sidebar menu 
     });
 
     // set sidebar closed and body solid layout mode
+    $rootScope.settings.layout.pageContentWhite = true;
     $rootScope.settings.layout.pageBodySolid = false;
     $rootScope.settings.layout.pageSidebarClosed = false;
 
@@ -14,21 +17,20 @@ angular.module('MetronicApp').controller('UserProfileController',
             $window.location.href = "login.html";
         }
 
-        $scope.profile = {};
-
         $scope.fetchProfile = function () {
-            var result = API.getProfile(entity.token);
+
+            $scope.config = {};
+            $scope.config.headers = {};
+            $scope.config.headers.sessionId = entity.token;
+            $scope.config.params = {};
+            $scope.config.params.cursor = -1;
+
+            var result = API.getTransactions($scope.config);
 
             result.success(function (data) {
                 if (data.status.code === 0) {
-                    $scope.profile.firstname = data.entity.firstName;
-                    $scope.profile.lastname = data.entity.lastName;
-                    $scope.profile.username = data.entity.userName;
-                    $scope.profile.phonenumber = data.entity.phoneNumber;
-                    $scope.profile.email = data.entity.email;
-                    $scope.profile.usertype = data.entity.userType;
-                    $scope.profile.status = data.entity.status;
-
+                    console.log(data);
+                    $scope.transactions = data.entity;
                 } else if (data.status.code === 212) {
                     LocalStorage.removeImmediate(Constants.KEY_USER_INFO);
                     $window.location.href = "login.html";
@@ -43,5 +45,4 @@ angular.module('MetronicApp').controller('UserProfileController',
             });
         };
         $scope.fetchProfile();
-
-}); 
+});

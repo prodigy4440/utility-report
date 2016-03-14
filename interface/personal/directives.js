@@ -23,7 +23,7 @@ MetronicApp.directive('ngSpinnerBar', ['$rootScope',
 
                     // auto scorll to page top
                     setTimeout(function () {
-                        Metronic.scrollTop(); // scroll to the top on content load
+                        //MetronicApp.scrollTop(); // scroll to the top on content load
                     }, $rootScope.settings.layout.pageAutoScrollOnLoad);
                 });
 
@@ -86,6 +86,6 @@ MetronicApp.directive("adminAccess", ["$compile", "$rootScope", function ($compi
 Commons.directive('loaderSpinner', function () {
     return {
         restrict: 'E',
-        templateUrl: '../assets/templates/loader-spinner.html'
+        templateUrl: '../tpl/loader-spinner.html'
     };
 });

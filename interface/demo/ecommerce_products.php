@@ -19,9 +19,9 @@
   $end = $end > $iTotalRecords ? $iTotalRecords : $end;
 
   $status_list = array(
-    array("success" => "Publushed"),
-    array("info" => "Not Published"),
-    array("danger" => "Deleted")
+    array("default" => "Publushed"),
+    array("default" => "Not Published"),
+    array("default" => "Deleted")
   );
 
   for($i = $iDisplayStart; $i < $end; $i++) {
@@ -36,7 +36,7 @@
       rand(5,4000),
       '05/01/2011',
       '<span class="label label-sm label-'.(key($status)).'">'.(current($status)).'</span>',
-      '<a href="ecommerce_products_edit.html" class="btn btn-xs default btn-editable"><i class="fa fa-pencil"></i> Edit</a>',
+      '<a href="?p=ecommerce_products_edit" class="btn btn-sm btn-default btn-circle btn-editable"><i class="fa fa-pencil"></i> Edit</a>',
     );
   }
 

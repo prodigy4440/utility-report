@@ -26,7 +26,7 @@
                     <i class="fa fa-comments"></i>
                 </div>
                 <div class="details">
-                    <div class="number"> 1349 </div>
+                    <div class="number">&#8358 {{bank}} </div>
                     <div class="desc"> Total Account Balance </div>
                 </div>
                 <a class="more" href="#"> &nbsp;
@@ -40,7 +40,7 @@
                     <i class="fa fa-bar-chart-o"></i>
                 </div>
                 <div class="details">
-                    <div class="number"> 12,5M$ </div>
+                    <div class="number">&#8358 {{dbsum[0]}} </div>
                     <div class="desc"> Today's Cash-in </div>
                 </div>
                 <a class="more" href="#"> &nbsp;
@@ -54,7 +54,7 @@
                     <i class="fa fa-shopping-cart"></i>
                 </div>
                 <div class="details">
-                    <div class="number"> 549 </div>
+                    <div class="number">&#8358 {{dbsum[1]}} </div>
                     <div class="desc"> Month's Cash-in </div>
                 </div>
                 <a class="more" href="#"> &nbsp;
@@ -69,7 +69,7 @@
                     <i class="fa fa-bar-chart-o"></i>
                 </div>
                 <div class="details">
-                    <div class="number"> 12,5M$ </div>
+                    <div class="number"> &#8358 {{dbsum[2]}} </div>
                     <div class="desc"> Year's Cash-in </div>
                 </div>
                 <a class="more" href="#"> &nbsp;
@@ -87,73 +87,77 @@
                 <div class="portlet-title">
                     <div class="caption caption-md">
                         <i class="icon-settings font-green"></i>
-                        <span class="caption-subject font-green bold uppercase">Sales Summary</span>
+                        <span class="caption-subject font-green bold uppercase">Payment Modes</span>
                         <span class="caption-helper hide">weekly stats...</span>
                     </div>
                     <div class="actions">
                         <div class="btn-group btn-group-devided" data-toggle="buttons">
-                            <label class="btn dark btn-outline btn-circle btn-sm active">
-                                <input type="radio" name="options" class="toggle" id="option1">Today</label>
-                            <label class="btn dark btn-outline btn-circle btn-sm">
-                                <input type="radio" name="options" class="toggle" id="option2">Week</label>
-                            <label class="btn dark btn-outline btn-circle btn-sm">
-                                <input type="radio" name="options" class="toggle" id="option2">Month</label>
+                            <button class="btn dark btn-outline btn-circle btn-sm active" ng-click="loadTodaySummary()" ng-init="loadTodaySummary()" class="toggle" id="option11">Today</button>
+                                <!--<button type="button" name="options" >Today</button>-->
+                            <button class="btn dark btn-outline btn-circle btn-sm" ng-click='loadThisWeekSummary()' class="toggle" id="option12">Week</button>
+                                <!--<button type="button" name="options" >Week</button>-->
+                            <button class="btn dark btn-outline btn-circle btn-sm" ng-click='loadThisMonthSummary()' class="toggle" id="option13">Month</button>
+                                <!--<button type="button" name="options" >Month</button>-->
                         </div>
                     </div>
                 </div>
                 <div class="portlet-body">
                     <div class="row list-separated">
                         <div class="col-md-3 col-sm-3 col-xs-6">
-                            <div class="font-grey-mint font-sm"> Total Sales </div>
-                            <div class="uppercase font-hg font-red-flamingo"> 13760
-                                <span class="font-lg font-grey-mint">$</span>
+                            <div class="font-grey-mint font-sm"> Wallet </div>
+                            <div class="uppercase font-hg font-red-flamingo">
+                                {{rtsum[0]}}
                             </div>
                         </div>
                         <div class="col-md-3 col-sm-3 col-xs-6">
-                            <div class="font-grey-mint font-sm"> Revenue </div>
-                            <div class="uppercase font-hg font-green"> 4760
-                                <span class="font-lg font-grey-mint">$</span>
+                            <div class="font-grey-mint font-sm"> Cash </div>
+                            <div class="uppercase font-hg font-green">
+                                {{rtsum[1]}}
                             </div>
                         </div>
                         <div class="col-md-3 col-sm-3 col-xs-6">
-                            <div class="font-grey-mint font-sm"> Expenses </div>
-                            <div class="uppercase font-hg font-purple"> 1760
-                                <span class="font-lg font-grey-mint">$</span>
+                            <div class="font-grey-mint font-sm"> Interswitch </div>
+                            <div class="uppercase font-hg font-purple">
+                                {{rtsum[2]}}
                             </div>
                         </div>
                         <div class="col-md-3 col-sm-3 col-xs-6">
-                            <div class="font-grey-mint font-sm"> Growth </div>
-                            <div class="uppercase font-hg font-blue"> 9760
-                                <span class="font-lg font-grey-mint">$</span>
+                            <div class="font-grey-mint font-sm"> Nibss </div>
+                            <div class="uppercase font-hg font-blue">
+                                {{rtsum[3]}}
                             </div>
                         </div>
                     </div>
                     <ul class="list-separated list-inline-xs hide">
                         <li>
                             <div class="font-grey-mint font-sm"> Total Sales </div>
-                            <div class="uppercase font-hg font-red-flamingo"> 13760
-                                <span class="font-lg font-grey-mint">$</span>
+                            <div class="uppercase font-hg font-red-flamingo">
+                                <span class="font-lg font-grey-mint">&#8358</span>
+                                13760
                             </div>
                         </li>
                         <li> </li>
                         <li class="border">
                             <div class="font-grey-mint font-sm"> Revenue </div>
-                            <div class="uppercase font-hg font-green"> 4760
-                                <span class="font-lg font-grey-mint">$</span>
+                            <div class="uppercase font-hg font-green">
+                                <span class="font-lg font-grey-mint">&#8358</span>
+                                4760
                             </div>
                         </li>
                         <li class="divider"> </li>
                         <li>
                             <div class="font-grey-mint font-sm"> Expenses </div>
-                            <div class="uppercase font-hg font-purple"> 1760
-                                <span class="font-lg font-grey-mint">$</span>
+                            <div class="uppercase font-hg font-purple">
+                                <span class="font-lg font-grey-mint">&#8358</span>
+                                1760
                             </div>
                         </li>
                         <li class="divider"> </li>
                         <li>
                             <div class="font-grey-mint font-sm"> Growth </div>
-                            <div class="uppercase font-hg font-blue"> 9760
-                                <span class="font-lg font-grey-mint">$</span>
+                            <div class="uppercase font-hg font-blue">
+                                <span class="font-lg font-grey-mint">&#8358</span>
+                                9760
                             </div>
                         </li>
                     </ul>
@@ -168,17 +172,17 @@
                 <div class="portlet-title">
                     <div class="caption caption-md">
                         <i class="icon-bar-chart font-red"></i>
-                        <span class="caption-subject font-red bold uppercase">Member Activity</span>
+                        <span class="caption-subject font-red bold uppercase">Business Unit Collection</span>
                         <span class="caption-helper hide">weekly stats...</span>
                     </div>
                     <div class="actions">
                         <div class="btn-group btn-group-devided" data-toggle="buttons">
-                            <label class="btn green btn-outline btn-circle btn-sm active">
-                                <input type="radio" name="options" class="toggle" id="option1">Today</label>
-                            <label class="btn red btn-outline btn-circle btn-sm">
-                                <input type="radio" name="options" class="toggle" id="option2">Week</label>
-                            <label class="btn blue btn-outline btn-circle btn-sm">
-                                <input type="radio" name="options" class="toggle" id="option2">Month</label>
+                            <button class="btn green btn-outline btn-circle btn-sm active" ng-click="loadTodayEarning()">
+                                <input type="radio" name="options" class="toggle" id="option21">Today</button>
+                            <button class="btn red btn-outline btn-circle btn-sm" ng-click="loadWeekEarning()">
+                                <input type="radio" name="options" class="toggle" id="option22" >Week</button>
+                            <button class="btn blue btn-outline btn-circle btn-sm" ng-click="loadMonthEarning()">
+                                <input type="radio" name="options" class="toggle" id="option23">Month</button>
                         </div>
                     </div>
                 </div>
@@ -191,8 +195,8 @@
                                     <div id="sparkline_bar"></div>
                                 </div>
                                 <div class="stat-number">
-                                    <div class="title"> Total </div>
-                                    <div class="number"> 2460 </div>
+                                    <div class="title"> Total Cash </div>
+                                    <div class="number"> &#8358 {{earning.nsum}} </div>
                                 </div>
                             </div>
                         </div>
@@ -203,8 +207,8 @@
                                     <div id="sparkline_bar2"></div>
                                 </div>
                                 <div class="stat-number">
-                                    <div class="title"> New </div>
-                                    <div class="number"> 719 </div>
+                                    <div class="title">Transactions</div>
+                                    <div class="number"> {{earning.tsum}} </div>
                                 </div>
                             </div>
                         </div>
@@ -213,64 +217,19 @@
                         <table class="table table-hover table-light">
                             <thead>
                                 <tr class="uppercase">
-                                    <th colspan="2"> MEMBER </th>
-                                    <th> Earnings </th>
-                                    <th> CASES </th>
-                                    <th> CLOSED </th>
-                                    <th> RATE </th>
+                                    <th colspan="2">Business District</th>
+                                    <th>Total Collection </th>
+                                    <th>Trans.</th>
                                 </tr>
                             </thead>
-                            <tr>
-                                <td class="fit">
-                                    <img class="user-pic rounded" src="../assets/pages/media/users/avatar4.jpg"> </td>
-                                <td>
-                                    <a href="javascript:;" class="primary-link">Brain</a>
+                            <tr ng-repeat="e in earning">
+                                <td colspan="2" class="bold font-green">
+                                    {{e[0]}}
                                 </td>
-                                <td> $345 </td>
-                                <td> 45 </td>
-                                <td> 124 </td>
-                                <td>
-                                    <span class="bold font-green">80%</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="fit">
-                                    <img class="user-pic rounded" src="../assets/pages/media/users/avatar5.jpg"> </td>
-                                <td>
-                                    <a href="javascript:;" class="primary-link">Nick</a>
-                                </td>
-                                <td> $560 </td>
-                                <td> 12 </td>
-                                <td> 24 </td>
-                                <td>
-                                    <span class="bold font-green">67%</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="fit">
-                                    <img class="user-pic rounded" src="../assets/pages/media/users/avatar6.jpg"> </td>
-                                <td>
-                                    <a href="javascript:;" class="primary-link">Tim</a>
-                                </td>
-                                <td> $1,345 </td>
-                                <td> 450 </td>
-                                <td> 46 </td>
-                                <td>
-                                    <span class="bold font-green">98%</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="fit">
-                                    <img class="user-pic rounded" src="../assets/pages/media/users/avatar7.jpg"> </td>
-                                <td>
-                                    <a href="javascript:;" class="primary-link">Tom</a>
-                                </td>
-                                <td> $645 </td>
-                                <td> 50 </td>
-                                <td> 89 </td>
-                                <td>
-                                    <span class="bold font-green">58%</span>
-                                </td>
+                                <td> &#8358 {{e[1]}} </td>
+
+                                <td> {{e[2]}} </td>
+
                             </tr>
                         </table>
                     </div>

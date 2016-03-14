@@ -19,8 +19,8 @@
   $end = $end > $iTotalRecords ? $iTotalRecords : $end;
 
   $status_list = array(
-    array("info" => "Pending"),
-    array("success" => "Notified"),
+    array("default" => "Pending"),
+    array("default" => "Notified"),
     array("danger" => "Failed")
   );
 
@@ -29,8 +29,8 @@
     $records["data"][] = array(
       '12/09/2013 09:20:45',
       'Product has been purchased. Pending for delivery',     
-      '<span class="label label-sm label-'.(key($status)).'">'.(current($status)).' <i class="fa fa-check"></i></span>',
-      ''
+      '<span class="label label-sm label-'.(key($status)).'">'.(current($status)).'</span>',
+      '<a href="javascript:;" class="btn btn-sm btn-default btn-editable"><i class="fa fa-share"></i> View</a>',
     );
   }
 

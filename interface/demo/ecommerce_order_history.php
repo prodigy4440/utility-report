@@ -29,7 +29,7 @@
       '12/09/2013 09:20:45',
       'Shipment #1231231232 has been created',     
       '<span class="label label-sm label-'.(key($status)).'">'.(current($status)).' <i class="fa fa-check"></i></span>',
-      ''
+      '<a href="#" class="btn btn-sm btn-default btn-editable"><i class="fa fa-search"></i> View</a>'
     );
   }
 

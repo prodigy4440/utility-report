@@ -34,7 +34,7 @@
       '450.60$',
       rand(1, 10),
       '<span class="label label-sm label-'.(key($status)).'">'.(current($status)).'</span>',
-      '<a href="javascript:;" class="btn btn-xs default"><i class="fa fa-search"></i> View</a>',
+      '<a href="javascript:;" class="btn btn-sm btn-outline grey-salsa"><i class="fa fa-search"></i> View</a>',
    );
   }
 

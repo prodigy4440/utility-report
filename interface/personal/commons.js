@@ -56,61 +56,193 @@ Commons.service("API", ["$http", function ($http) {
     var self = this;
 
     self.login = function (credentials) {
-        return $http.post(Constants.BASE_URL +Constants.ACCOUNT+ 'login', credentials);
+        return $http.post(Constants.BASE_URL + Constants.ACCOUNT + 'login', credentials);
     };
 
     self.logout = function (token) {
-        return $http.get(Constants.BASE_URL +Constants.ACCOUNT+ 'logout',{headers: {'sessionId': token}});
-    };
-    
-    self.createSuperUser = function(){
-            return $http.post(Constants.BASE_URL+Constants.ACCOUNT+'create');
-    };
-    
-    self.createOtherUser = function(){
-            return $http.post(Constants.BASE_URL+Constants.ACCOUNT+'create/other');
+        return $http.get(Constants.BASE_URL + Constants.ACCOUNT + 'logout', {headers: {'sessionId': token}});
     };
 
-    self.getUsers = function(token){
-        return $http.get(Constants.BASE_URL+Constants.ACCOUNT+'users',{headers:{'sessionId':token}});
+    self.createSuperUser = function () {
+        return $http.post(Constants.BASE_URL + Constants.ACCOUNT + 'create', {});
     };
-    
-    self.getProfile = function(){
-            return $http.get(Constants.BASE_URL+Constants.ACCOUNT+'profile/detail');
+
+    self.createOtherUser = function (config) {
+        return $http.get(Constants.BASE_URL + Constants.ACCOUNT + 'create/other',config);
     };
-    
-    self.getLoginLog = function(){
-            return $http.get(Constants.BASE_URL+Constants.ACCOUNT+'login/log');
+
+    self.getUsers = function (token) {
+        return $http.get(Constants.BASE_URL + Constants.ACCOUNT + 'users', {headers: {'sessionId': token}});
     };
-    
-    self.getLoginLogs = function(){
-            return $http.get(Constants.BASE_URL+Constants.ACCOUNT+'login/logs');
+
+    self.getProfile = function (token) {
+        return $http.get(Constants.BASE_URL + Constants.ACCOUNT + 'profile/detail', {headers: {'sessionId': token}});
     };
-    
-    self.changePassword = function(){
-            return $http.put(Constants.BASE_URL+Constants.ACCOUNT+'changepassword');
+
+    self.getLoginLog = function () {
+        return $http.get(Constants.BASE_URL + Constants.ACCOUNT + 'login/log');
     };
-    
-    self.mailConfig = function(){
-            return $http.post(Constants.BASE_URL+Constants.ACCOUNT+'mailconfig');
+
+    self.getLoginLogs = function () {
+        return $http.get(Constants.BASE_URL + Constants.ACCOUNT + 'login/logs');
     };
-    
-    self.forgetPassword = function(useremail){
-            return $http.get(Constants.BASE_URL+Constants.ACCOUNT+"forget",{params: { email: useremail}});
+
+    self.changePassword = function () {
+        return $http.put(Constants.BASE_URL + Constants.ACCOUNT + 'changepassword');
     };
-    
-    self.resetPassword = function(){
-            return $http.put(Constants.BASE_URL+Constants.ACCOUNT+"reset");
+
+    self.mailConfig = function () {
+        return $http.post(Constants.BASE_URL + Constants.ACCOUNT + 'mailconfig');
     };
-    
-    self.getBusinessUnits = function(){
-            return $http.get(Constants.BASE_URL+Constants.PUBLIC+"businessunits");
+
+    self.forgetPassword = function (useremail) {
+        return $http.get(Constants.BASE_URL + Constants.ACCOUNT + "forget", {params: {email: useremail}});
     };
-    
-    self.getBusinessUnits = function(){
-            return $http.get(Constants.BASE_URL+Constants.PUBLIC+"cashoffices/all");
+
+    self.resetPassword = function () {
+        return $http.put(Constants.BASE_URL + Constants.ACCOUNT + "reset");
     };
-    
+
+    self.getBusinessUnits = function () {
+        return $http.get(Constants.BASE_URL + Constants.PUBLIC + "businessunits");
+    };
+
+    self.getCashOffices = function () {
+        return $http.get(Constants.BASE_URL + Constants.PUBLIC + "cashoffices/all");
+    };
+
+    self.getBusinessUnitCashOffices = function (businessunit) {
+        return $http.get(Constants.BASE_URL + Constants.PUBLIC + "cashoffices/"+businessunit);
+    };
+
+    self.getTerminalUsers = function (config) {
+        return $http.get(Constants.BASE_URL + Constants.SALES + "terminal/users",config);
+    };
+
+    self.createTerminalUser = function (config) {
+        return $http.get(Constants.BASE_URL + Constants.SALES + "terminal",config);
+    };
+
+    self.getSelfcareUsers = function (config) {
+        return $http.get(Constants.BASE_URL + Constants.SALES + "selfcare/users",config);
+    };
+
+    self.getCustomerAccountInfo = function (config) {
+        return $http.get(Constants.BASE_URL + Constants.SALES + "customer/account/info",config);
+    };
+
+    self.getInvoices = function (config) {
+        return $http.get(Constants.BASE_URL + Constants.SALES + "invoices",config);
+    };
+
+    self.getFaults= function (config) {
+        return $http.get(Constants.BASE_URL + Constants.SALES + "faults",config);
+    };
+
+    self.getTransactions= function (config) {
+        return $http.get(Constants.BASE_URL + Constants.SALES + "transactions/range",config);
+    };
+
+    self.getAllCashin= function (config) {
+        return $http.get(Constants.BASE_URL + Constants.SALES + "cashin/all",config);
+    };
+
+    self.getThisMonthCashin= function (config) {
+        return $http.get(Constants.BASE_URL + Constants.SALES + "cashin/month",config);
+    };
+
+    self.getThisMonthTotalCashin= function (config) {
+        return $http.get(Constants.BASE_URL + Constants.SALES + "cashin/month/total",config);
+    };
+
+    self.getDbSummary= function (config) {
+        return $http.get(Constants.BASE_URL + Constants.SALES + "cashin/dbsummary",config);
+    };
+
+    self.getTodaySummary= function (config) {
+        return $http.get(Constants.BASE_URL + Constants.SALES + "cashin/count/today",config);
+    };
+
+    self.getThisWeekSummary= function (config) {
+        return $http.get(Constants.BASE_URL + Constants.SALES + "cashin/count/week",config);
+    };
+
+    self.getThisMonthSummary= function (config) {
+        return $http.get(Constants.BASE_URL + Constants.SALES + "cashin/count/month",config);
+    };
+
+    self.getCashinPerDistrict= function (config) {
+        return $http.get(Constants.BASE_URL + Constants.SALES + "cashin/district",config);
+    };
+
+    self.getTodayEarning= function (config) {
+        return $http.get(Constants.BASE_URL + Constants.SALES + "cashin/district/earning/today",config);
+    };
+
+    self.getWeekEarning= function (config) {
+        return $http.get(Constants.BASE_URL + Constants.SALES + "cashin/district/earning/week",config);
+    };
+
+    self.getMonthEarning= function (config) {
+        return $http.get(Constants.BASE_URL + Constants.SALES + "cashin/district/earning/month",config);
+    };
+
+    self.getProviders= function (config) {
+        return $http.get(Constants.BASE_URL + Constants.PUBLIC + "providers",config);
+    };
+
+    self.getChannels= function (config) {
+        return $http.get(Constants.BASE_URL + Constants.PUBLIC + "channels",config);
+    };
+
+    self.getBankBalance= function (config) {
+        return $http.get(Constants.BASE_URL + Constants.SALES + "bank/balance",config);
+    };
+
+    self.getTransactionPerChannel= function (config) {
+        return $http.get(Constants.BASE_URL + Constants.SALES + "transaction/channel",config);
+    };
+
+    self.getTransactionPerProvider= function (config) {
+        return $http.get(Constants.BASE_URL + Constants.SALES + "transaction/provider",config);
+    };
+
+    self.getBankDetails= function (config) {
+        return $http.get(Constants.BASE_URL + Constants.SALES + "bank/detail",config);
+    };
+
+    self.getCountByStatusPerDistrict= function (config) {
+        return $http.get(Constants.BASE_URL + Constants.SALES + "cashin/count/per/status/district",config);
+    };
+
+    self.getCashinPerDistrictPerCasshOffice = function (config) {
+        return $http.get(Constants.BASE_URL + Constants.SALES + "cashin/perdistrict/cashoffice",config);
+    };
+
+    self.getCashinSummaryPerDistrict = function (config) {
+        return $http.get(Constants.BASE_URL + Constants.SALES + "cashin/total/summary",config);
+    };
+
+    self.getCustomerTrnHistory = function (config) {
+        return $http.get(Constants.BASE_URL + Constants.SALES + "crm/trns/history",config);
+    };
+
+    self.getCreateCashOffice = function (config) {
+        return $http.get(Constants.BASE_URL + Constants.SALES + "cashoffice/create",config);
+    };
+
+    self.getRCMCreateCashOffice = function (config) {
+        return $http.get(Constants.BASE_URL + Constants.SALES + "rcm/cashoffice/by/unit",config);
+    };
+
+    self.changeRCMCashOfficeStatus = function (config) {
+        return $http.get(Constants.BASE_URL + Constants.SALES + "cashoffice/changestatus",config);
+    };
+
+    self.changeUserStatusAPI = function (config) {
+        return $http.get(Constants.BASE_URL + Constants.ACCOUNT + "cashoffice/changestatus",config);
+    };
+
 
 //    self.getImageUrl = function (relativeUrl) {
 //        if (!relativeUrl) {
@@ -276,10 +408,10 @@ Commons.service("Functions", [
         var self = this;
         self.parseDate = function (dateString) {
             var isSafari = /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
-            if(isSafari){
+            if (isSafari) {
                 var newDate = dateString.split(' ');
                 return new Date(newDate[0]).toDateString();
-            }else {
+            } else {
                 return new Date(dateString);
             }
         };

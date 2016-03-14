@@ -30,14 +30,14 @@
     $id = ($i + 1);
     $records["data"][] = array(
       '<input type="checkbox" name="id[]" value="'.$id.'">',
-      $id,
+      $id,  
       '12/09/2013',
       'Test Customer',
       'Test Customer',
       '234.40$',
       '234.40$',
       '<span class="label label-sm label-'.(key($status)).'">'.(current($status)).'</span>',
-      '<a href="ecommerce_orders_view.html" class="btn btn-xs default btn-editable"><i class="fa fa-search"></i> View</a>',
+      '<a href="?p=ecommerce_orders_view" class="btn btn-sm btn-circle btn-default btn-editable"><i class="fa fa-search"></i> View</a>',
     );
   }
 

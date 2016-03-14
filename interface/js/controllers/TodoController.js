@@ -5,6 +5,6 @@ angular.module('MetronicApp').controller('TodoController', function($rootScope, 
 
     // set sidebar closed and body solid layout mode
     $rootScope.settings.layout.pageContentWhite = true;
-    $rootScope.settings.layout.pageBodySolid = true;
-    $rootScope.settings.layout.pageSidebarClosed = true;
+    $rootScope.settings.layout.pageBodySolid = flase;
+    $rootScope.settings.layout.pageSidebarClosed = false;
 });

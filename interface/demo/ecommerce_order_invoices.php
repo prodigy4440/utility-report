@@ -34,7 +34,7 @@
       '12/09/2013',
       '234$',
       '<span class="label label-sm label-'.(key($status)).'">'.(current($status)).'</span>',
-      '<a href="javascript:;" class="btn btn-xs default btn-editable"><i class="fa fa-print"></i> Print</a>',
+      '<a href="javascript:;" class="btn btn-sm btn-default btn-editable"><i class="fa fa-print"></i> Print</a>',
     );
   }
 

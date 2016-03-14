@@ -1,0 +1,54 @@
+<!-- BEGIN PAGE BREADCRUMB -->
+<ul class="page-breadcrumb breadcrumb">
+    <li>
+        <a href="#">Home</a>
+        <i class="fa fa-circle"></i>
+    </li>
+    <li class="active" data-ng-bind="$state.current.data.pageTitle"> </li>
+</ul>
+<!-- END PAGE BREADCRUMB -->
+<!-- BEGIN MAIN CONTENT -->
+<div class="row" ng-controller="TerminalController">
+    <div class="col-md-12">
+        <!-- BEGIN: ACCORDION DEMO -->
+        <div class="portlet light">
+            <div class="portlet-title">
+                <div class="caption font-green-sharp">
+                    <i class="icon-settings font-green-sharp"></i>
+                    <span class="caption-subject bold uppercase">Cashiers</span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <table class="table table-striped table-bordered table-hover table-checkable order-column"
+                       id="sample_1">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Phone Number</th>
+                        <th>Email</th>
+                        <th>District</th>
+                        <th>Cash Office</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="odd gradeX" ng-repeat="terminaluser in terminalusers">
+                        <td>{{terminalusers.indexOf(terminaluser)+1}}</td>
+                        <td> {{terminaluser.accountDetails.firstName}}</td>
+                        <td> {{terminaluser.accountDetails.lastName}}</td>
+                        <td>0{{terminaluser.accountDetails.phoneNumber}}</td>
+                        <td>{{terminaluser.accountDetails.email}}</td>
+                        <td> {{terminaluser.accountDetails.businessDistrict}}</td>
+                        <td> {{terminaluser.cashOfficeName}}</td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- END: ACCORDION DEMO -->
+
+    </div>
+</div>
+<!-- END MAIN CONTENT -->
